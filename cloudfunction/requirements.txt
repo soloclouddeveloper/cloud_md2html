@@ -1,0 +1,5 @@
+flask==3.*
+Markdown==3.*
+cloudevents==1.*
+functions-framework==3.*
+google-cloud-storage==2.*
