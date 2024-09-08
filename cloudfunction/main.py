@@ -88,23 +88,3 @@ def delete_markdown_file(filename, md_bucket):
     bucket = storage_client.bucket(md_bucket)
     blob = bucket.blob(filename)
     blob.delete()
-
-
-#
-# deploy:
-# documenation: https://cloud.google.com/sdk/gcloud/reference/functions/deploy
-#
-# '''
-# gcloud functions deploy md2html \
-# --gen2 \
-# --runtime=python312 \
-# --region=us-central1 \
-# --source=. \
-# --entry-point=md2html \
-# --trigger-event-filters="type=google.cloud.storage.object.v1.finalized" \
-# --trigger-event-filters="bucket=[SOURCE_BUCKET]" \
-# --max-instances=5 \
-# --set-env-vars="TARGET_BUCKET=[TARGET_BUCKET]"
-# '''
-
-# --service-account="scd-cloud-func-sa@scd-site-427622.iam.gserviceaccount.com"
