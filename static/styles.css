@@ -11,7 +11,20 @@ img {
 }
 
 p {
+    margin-top: 0.2em;
+    margin-bottom: 0px;
     padding: 5px;
+    color: #5A5958;
+}
+
+code {
+    font-family: Courier,'Courier New';
+    font-size: 14px;
+}
+
+.row {
+    margin-bottom: 0px;
+
 }
 
 /* For mobile phones: */
@@ -44,6 +57,73 @@ p {
     font-size: x-large;
     text-decoration: none;
 }
+
+.nav-links {
+   font-size: 18px;
+}
+
+.not-found {
+    font-size: 40px;
+    font-weight: bolder;
+    color: #72adde;
+}
+
+div.bottom {
+    position: fixed;
+    bottom: 0;
+
+    /* And if you want the div to be full-width: */
+    left: 0;
+    right: 0;
+    padding-left: 5px;
+    padding-bottom: 5px;
+}
+
+.date-posted {
+    color: #5A5958;
+    font-size: 16px;
+    font-family: 'Courier New', Courier, monospace;
+}
+
+
+span.date-posted {
+    padding-right: 10px;
+}
+
+
+/* for markdown conversion when can't specify class or id */
+/* see .link-text */
+p > a {
+    color: #004470;
+    font-size: x-large;
+    text-decoration: none;
+}
+
+/* see .date-posted and span.date-posted */ 
+p > a > code {
+    color: #5A5958;
+    padding-right: 10px;
+    font-size: 16px;
+}
+/* ------------------------------------------------------- */
+
+ul,
+li {
+    color: #5A5958;
+    font-size: x-large;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+div.bottom {
+   position: fixed;
+   bottom: 0;
+
+   /* And if you want the div to be full-width: */
+   left: 0;
+   right: 0;
+   padding-left: 5px;
+   padding-bottom: 5px;
+ }
 
 @media only screen and (max-width: 768px) {
 
