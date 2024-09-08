@@ -16,7 +16,7 @@ def md2html(cloud_event: CloudEvent) -> None:
     """Converts a markdown file to HTML.  Triggered when 
     file is created/uploaded to cloud storage bucket.
 
-    The HTML file is then saved to OUT_BUCKET specified in 
+    The HTML file is then saved to TARGET_BUCKET specified in 
     the environment variable.
 
     Args:
@@ -26,6 +26,8 @@ def md2html(cloud_event: CloudEvent) -> None:
     None
     """
 
+    target_bucket = os.environ["TARGET_BUCKET"]
+
     # read all the necessary files in
     data = cloud_event.data
 
@@ -34,19 +36,26 @@ def md2html(cloud_event: CloudEvent) -> None:
     num_parts = len(filename_parts)
     if num_parts < 2 or filename_parts[num_parts - 1].lower() != "md":
         return
+    
+    nav_bar = ''
+    if data["name"] == "til/index.md":
+        nav_bar = read_bucket_blob_as_text("nav_til_index.html", target_bucket)
+    elif data["name"] == "index.md":
+        nav_bar = read_bucket_blob_as_text("nav_main_index.html", target_bucket)
+    elif "til/" in data["name"]:
+        nav_bar = read_bucket_blob_as_text("nav_til_article.html", target_bucket)
 
-    out_bucket = os.environ["OUT_BUCKET"]
     md_file = read_bucket_blob_as_text(data["name"], data["bucket"])
-    html_header = read_bucket_blob_as_text("header.html", out_bucket)
-    html_footer = read_bucket_blob_as_text("footer.html", out_bucket)
+    html_header = read_bucket_blob_as_text("header.html", target_bucket)
+    html_footer = read_bucket_blob_as_text("footer.html", target_bucket)
 
     # convert markdown to html and assemble final html file
     md_html = markdown.markdown(md_file)
-    html_final = html_header + md_html + html_footer
+    html_final = html_header + nav_bar + md_html + html_footer
 
-    # change the extension and save to OUT_BUCKET
+    # change the extension and save to TARGET_BUCKET
     storage_client = storage.Client()
-    bucket = storage_client.bucket(out_bucket)
+    bucket = storage_client.bucket(target_bucket)
     blob = bucket.blob(data["name"].replace(".md", ".html"))
     blob.upload_from_string(html_final, content_type="text/html")
 
@@ -83,16 +92,19 @@ def delete_markdown_file(filename, md_bucket):
 
 #
 # deploy:
+# documenation: https://cloud.google.com/sdk/gcloud/reference/functions/deploy
 #
 # '''
 # gcloud functions deploy md2html \
 # --gen2 \
 # --runtime=python312 \
-# --region=[REGION] \
+# --region=us-central1 \
 # --source=. \
 # --entry-point=md2html \
 # --trigger-event-filters="type=google.cloud.storage.object.v1.finalized" \
-# --trigger-event-filters="bucket=[MARKDOWN-UPLOAD-BUCKET]" \
+# --trigger-event-filters="bucket=[SOURCE_BUCKET]" \
 # --max-instances=5 \
-# --set-env-vars="OUT_BUCKET=[HTML-NON-PUBLIC-BUCKET]"
+# --set-env-vars="TARGET_BUCKET=[TARGET_BUCKET]"
 # '''
+
+# --service-account="scd-cloud-func-sa@scd-site-427622.iam.gserviceaccount.com"
