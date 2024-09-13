@@ -20,7 +20,7 @@ gcloud functions deploy md2html \
 --trigger-event-filters="type=google.cloud.storage.object.v1.finalized" \
 --trigger-event-filters="bucket=[MARKDOWN-UPLOAD-BUCKET]" \
 --max-instances=5 \
---set-env-vars="OUT_BUCKET=[HTML-NON-PUBLIC-BUCKET]"
+--set-env-vars="TARGET_BUCKET=[HTML-NON-PUBLIC-BUCKET]"
 '''
 
 ## Header and Footer files
@@ -31,3 +31,8 @@ gcloud functions deploy md2html \
 ## CSS files
 
 The CSS files are saved in a public bucket.
+https://storage.googleapis.com/scd-static-e7w4/css/scd_styles.css
+
+### Image files
+
+https://storage.googleapis.com/scd-static-e7w4/img/<FILENAME>

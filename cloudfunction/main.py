@@ -42,7 +42,7 @@ def md2html(cloud_event: CloudEvent) -> None:
         nav_bar = read_bucket_blob_as_text("nav_til_index.html", target_bucket)
     elif data["name"] == "index.md":
         nav_bar = read_bucket_blob_as_text("nav_main_index.html", target_bucket)
-    elif "til/" in data["name"]:
+    else:
         nav_bar = read_bucket_blob_as_text("nav_til_article.html", target_bucket)
 
     md_file = read_bucket_blob_as_text(data["name"], data["bucket"])
